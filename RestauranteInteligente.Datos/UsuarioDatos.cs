@@ -9,54 +9,57 @@ using System.Threading.Tasks;
 
 namespace RestauranteInteligente.Datos
 {
-    public class TipoDatos
+    public class UsuarioDatos
     {
-        
         SqlConnection conexion;
 
-        public TipoDatos()
+        public UsuarioDatos()
         {
             conexion = new SqlConnection(Conexion.cadenaConexion);
         }
 
-        public List<Tipo> ListarTipo(int estado)
+        public List<Usuario> ListarUsuarioXTipo(int estado,int tipo)
         {
-            List<Tipo> tipos = null;
+            List<Usuario> usuarios = null;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarTipo";
+            cmd.CommandText = "sp_ListarUsuarioXTipo";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
             conexion.Open();
 
             cmd.Parameters.AddWithValue("@estado", estado);
+            cmd.Parameters.AddWithValue("@tipo", tipo);
 
             SqlDataReader lector = cmd.ExecuteReader();
-            
+
             if (lector.HasRows)
             {
-                tipos = new List<Tipo>();
+                usuarios = new List<Usuario>();
                 while (lector.Read())
                 {
-                    var tipo = new Tipo();
-                    tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
-                    tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
-                    tipo.estado = int.Parse(lector["ESTADO_TIPO"].ToString());
-                    tipos.Add(tipo);
+                    var usuario = new Usuario();
+                    var _tipo = new Tipo();
+                    usuario.codigo = int.Parse(lector["CODIGO_USUARIO"].ToString());
+                    usuario.nombre = lector["NOMBRE_USUARIO"].ToString();
+                    usuario.estado = int.Parse(lector["ESTADO_USUARIO"].ToString());
+                    _tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
+                    usuario.tipo = _tipo;
+                    usuarios.Add(usuario);
                 }
             }
 
             conexion.Close();
-            return tipos;
+            return usuarios;
         }
 
-        public Tipo ListarTipoXId(int id)
+        public Usuario ListarUsuarioXId(int id)
         {
-            Tipo tipo = null;
+            Usuario usuario = null;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarTipoXId";
+            cmd.CommandText = "sp_ListarUsuarioXId";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
@@ -68,62 +71,71 @@ namespace RestauranteInteligente.Datos
 
             if (lector.HasRows)
             {
-                tipo = new Tipo();
+                usuario = new Usuario();
+                var _tipo = new Tipo();
                 while (lector.Read())
                 {
-                    tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
-                    tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
-                    tipo.estado = int.Parse(lector["ESTADO_TIPO"].ToString());
+                    
+                    usuario.codigo = int.Parse(lector["CODIGO_USUARIO"].ToString());
+                    usuario.nombre = lector["NOMBRE_USUARIO"].ToString();
+                    usuario.estado = int.Parse(lector["ESTADO_USUARIO"].ToString());
+                    _tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
+                    _tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
+                    usuario.tipo = _tipo;
                 }
             }
 
             conexion.Close();
-            return tipo;
+            return usuario;
         }
-        
 
-        public void AgregarTipo(Tipo tipo)
+
+        public void AgregarUsuario(Usuario usuario)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_AgregarTipo";
+            cmd.CommandText = "sp_AgregarUsuario";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
             conexion.Open();
 
-            cmd.Parameters.AddWithValue("@descripcion", tipo.descripcion);
-
-            cmd.ExecuteNonQuery();
-           
-            conexion.Close();
-        }
-
-        public void ActualizarTipo(Tipo tipo)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ActualizarTipo";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Connection = conexion;
-
-            conexion.Open();
-
-            cmd.Parameters.AddWithValue("@id", tipo.codigo);
-            cmd.Parameters.AddWithValue("@descripcion", tipo.descripcion);
+            cmd.Parameters.AddWithValue("@nombre", usuario.nombre);
+            cmd.Parameters.AddWithValue("@password", usuario.password);
+            cmd.Parameters.AddWithValue("@tipo", usuario.tipo.codigo);
 
             cmd.ExecuteNonQuery();
 
             conexion.Close();
         }
 
-        public void EliminarTipo(int id)
+        public void ActualizarUsuario(Usuario usuario)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_EliminarTipo";
+            cmd.CommandText = "sp_ActualizarUsuario";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
             conexion.Open();
-            
+
+            cmd.Parameters.AddWithValue("@id", usuario.codigo);
+            cmd.Parameters.AddWithValue("@nombre", usuario.nombre);
+            cmd.Parameters.AddWithValue("@password", usuario.password);
+            cmd.Parameters.AddWithValue("@tipo", usuario.tipo.codigo);
+
+            cmd.ExecuteNonQuery();
+
+            conexion.Close();
+        }
+
+        public void EliminarUsuario(int id)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "sp_EliminarUsuario";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = conexion;
+
+            conexion.Open();
+
             cmd.Parameters.AddWithValue("@id", id);
 
             cmd.ExecuteNonQuery();
@@ -131,10 +143,10 @@ namespace RestauranteInteligente.Datos
             conexion.Close();
         }
 
-        public void RestaurarTipo(int id)
+        public void RestaurarUsuario(int id)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_RestaurarTipo";
+            cmd.CommandText = "sp_RestaurarUsuario";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 

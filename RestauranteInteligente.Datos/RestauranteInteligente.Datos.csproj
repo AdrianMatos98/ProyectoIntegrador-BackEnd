@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoriaDatos.cs" />
     <Compile Include="Conexion.cs" />
+    <Compile Include="PlatilloDatos.cs" />
     <Compile Include="TipoDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioDatos.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestauranteInteligente.Modelos\RestauranteInteligente.Modelos.csproj">

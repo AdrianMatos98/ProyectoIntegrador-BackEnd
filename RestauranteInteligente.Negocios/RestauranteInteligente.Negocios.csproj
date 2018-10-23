@@ -41,8 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CategoriaNegocios.cs" />
+    <Compile Include="PlatilloNegocios.cs" />
     <Compile Include="TipoNegocios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UsuarioNegocios.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestauranteInteligente.Datos\RestauranteInteligente.Datos.csproj">

@@ -21,16 +21,16 @@ namespace RestauranteInteligente.Controllers
         }
 
         [HttpGet]
-        public List<Tipo> Listatipo()
+        public List<Tipo> ListarTipo(int estado)
         {
-            return tipoNegocios.ListaTipo();
+            return tipoNegocios.ListarTipo(estado);
 
         }
 
         [HttpGet]
-        public Tipo ListatipoXId(int id)
+        public Tipo ListarTipoXId(int id)
         {
-            return tipoNegocios.ListaTipoXId(id);
+            return tipoNegocios.ListarTipoXId(id);
 
         }
 
@@ -48,10 +48,17 @@ namespace RestauranteInteligente.Controllers
 
         }
 
-        [HttpDelete]
+        [HttpPut]
         public string EliminarTipo(int id)
         {
             return tipoNegocios.EliminarTipo(id);
+
+        }
+
+        [HttpPut]
+        public string RestaurarTipo(int id)
+        {
+            return tipoNegocios.RestaurarTipo(id);
 
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestauranteInteligente.Modelos
 {
-    public class Tipo
+    public class Categoria
     {
         public int codigo { get; set; }
         public string descripcion { get; set; }
@@ -16,7 +16,7 @@ namespace RestauranteInteligente.Modelos
         {
             if (string.IsNullOrEmpty(descripcion))
                 throw new Exception("Descripcion es requerido");
-            else if(descripcion.Length>25)
+            else if (descripcion.Length > 25)
                 throw new Exception("Descripción tiene un máximo de 25 caracteres");
         }
     }

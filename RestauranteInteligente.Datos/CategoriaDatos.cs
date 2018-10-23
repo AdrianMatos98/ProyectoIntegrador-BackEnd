@@ -9,22 +9,21 @@ using System.Threading.Tasks;
 
 namespace RestauranteInteligente.Datos
 {
-    public class TipoDatos
+    public class CategoriaDatos
     {
-        
         SqlConnection conexion;
 
-        public TipoDatos()
+        public CategoriaDatos()
         {
             conexion = new SqlConnection(Conexion.cadenaConexion);
         }
 
-        public List<Tipo> ListarTipo(int estado)
+        public List<Categoria> ListarCategoria(int estado)
         {
-            List<Tipo> tipos = null;
+            List<Categoria> tipos = null;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarTipo";
+            cmd.CommandText = "sp_ListarCategoria";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
@@ -33,17 +32,17 @@ namespace RestauranteInteligente.Datos
             cmd.Parameters.AddWithValue("@estado", estado);
 
             SqlDataReader lector = cmd.ExecuteReader();
-            
+
             if (lector.HasRows)
             {
-                tipos = new List<Tipo>();
+                tipos = new List<Categoria>();
                 while (lector.Read())
                 {
-                    var tipo = new Tipo();
-                    tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
-                    tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
-                    tipo.estado = int.Parse(lector["ESTADO_TIPO"].ToString());
-                    tipos.Add(tipo);
+                    var categoria = new Categoria();
+                    categoria.codigo = int.Parse(lector["CODIGO_CATEGORIA"].ToString());
+                    categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
+                    categoria.estado = int.Parse(lector["ESTADO_CATEGORIA"].ToString());
+                    tipos.Add(categoria);
                 }
             }
 
@@ -51,12 +50,12 @@ namespace RestauranteInteligente.Datos
             return tipos;
         }
 
-        public Tipo ListarTipoXId(int id)
+        public Categoria ListarCategoriaXId(int id)
         {
-            Tipo tipo = null;
+            Categoria categoria = null;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarTipoXId";
+            cmd.CommandText = "sp_ListarCategoriaXId";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
@@ -68,62 +67,62 @@ namespace RestauranteInteligente.Datos
 
             if (lector.HasRows)
             {
-                tipo = new Tipo();
+                categoria = new Categoria();
                 while (lector.Read())
                 {
-                    tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
-                    tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
-                    tipo.estado = int.Parse(lector["ESTADO_TIPO"].ToString());
+                    categoria.codigo = int.Parse(lector["CODIGO_CATEGORIA"].ToString());
+                    categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
+                    categoria.estado = int.Parse(lector["ESTADO_CATEGORIA"].ToString());
                 }
             }
 
             conexion.Close();
-            return tipo;
+            return categoria;
         }
-        
 
-        public void AgregarTipo(Tipo tipo)
+
+        public void AgregarCategoria(Categoria categoria)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_AgregarTipo";
+            cmd.CommandText = "sp_AgregarCategoria";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
             conexion.Open();
 
-            cmd.Parameters.AddWithValue("@descripcion", tipo.descripcion);
-
-            cmd.ExecuteNonQuery();
-           
-            conexion.Close();
-        }
-
-        public void ActualizarTipo(Tipo tipo)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ActualizarTipo";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Connection = conexion;
-
-            conexion.Open();
-
-            cmd.Parameters.AddWithValue("@id", tipo.codigo);
-            cmd.Parameters.AddWithValue("@descripcion", tipo.descripcion);
+            cmd.Parameters.AddWithValue("@descripcion", categoria.descripcion);
 
             cmd.ExecuteNonQuery();
 
             conexion.Close();
         }
 
-        public void EliminarTipo(int id)
+        public void ActualizarCategoria(Categoria categoria)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_EliminarTipo";
+            cmd.CommandText = "sp_ActualizarCategoria";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
             conexion.Open();
-            
+
+            cmd.Parameters.AddWithValue("@id", categoria.codigo);
+            cmd.Parameters.AddWithValue("@descripcion", categoria.descripcion);
+
+            cmd.ExecuteNonQuery();
+
+            conexion.Close();
+        }
+
+        public void EliminarCategoria(int id)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "sp_EliminarCategoria";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = conexion;
+
+            conexion.Open();
+
             cmd.Parameters.AddWithValue("@id", id);
 
             cmd.ExecuteNonQuery();
@@ -131,10 +130,10 @@ namespace RestauranteInteligente.Datos
             conexion.Close();
         }
 
-        public void RestaurarTipo(int id)
+        public void RestaurarCategoria(int id)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_RestaurarTipo";
+            cmd.CommandText = "sp_RestaurarCategoria";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 

@@ -17,16 +17,16 @@ namespace RestauranteInteligente.Negocios
             Datos = new TipoDatos();
         }
 
-        public List<Tipo> ListaTipo()
+        public List<Tipo> ListarTipo(int estado)
         {
 
-            return Datos.ListaTipo();
+            return Datos.ListarTipo(estado);
         }
 
-        public Tipo ListaTipoXId(int id)
+        public Tipo ListarTipoXId(int id)
         {
 
-            return Datos.ListaTipoXId(id);
+            return Datos.ListarTipoXId(id);
         }
 
         public string AgregarTipo(Tipo tipo)
@@ -39,7 +39,7 @@ namespace RestauranteInteligente.Negocios
                 msj = "Tipo agregado";
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 msj = "No se agrego el tipo : " + ex.Message;
             }
@@ -64,6 +64,7 @@ namespace RestauranteInteligente.Negocios
             return msj;
         }
 
+
         public string EliminarTipo(int id)
         {
             string msj = "";
@@ -76,6 +77,24 @@ namespace RestauranteInteligente.Negocios
             catch (Exception ex)
             {
                 msj = "No se elimino el tipo : " + ex.Message;
+            }
+            return msj;
+        }
+
+
+
+        public string RestaurarTipo(int id)
+        {
+            string msj = "";
+            try
+            {
+                Datos.RestaurarTipo(id);
+                msj = "Tipo restaurado";
+
+            }
+            catch (Exception ex)
+            {
+                msj = "No se restauro el tipo : " + ex.Message;
             }
             return msj;
         }
