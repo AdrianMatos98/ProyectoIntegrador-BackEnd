@@ -16,11 +16,15 @@ namespace RestauranteInteligente.Negocios
         {
             Datos = new PlatilloDatos();
         }
+        
 
-        public List<Platillo> ListarPlatilloXCategoria(int estado, int categoria)
+        public List<Platillo> ListarPlatilloXCategoria_Nombre(int estado, int categoria,string nombre)
         {
-
-            return Datos.ListarPlatilloXCategoria(estado, categoria);
+            if (nombre == null)
+            {
+                nombre = "";
+            }
+            return Datos.ListarPlatilloXCategoria_Nombre(estado, categoria, nombre);
         }
 
         public Platillo ListarPlatilloXId(int id)

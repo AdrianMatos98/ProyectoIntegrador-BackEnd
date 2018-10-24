@@ -18,12 +18,12 @@ namespace RestauranteInteligente.Datos
             conexion = new SqlConnection(Conexion.cadenaConexion);
         }
 
-        public List<Platillo> ListarPlatilloXCategoria(int estado, int categoria)
+        public List<Platillo> ListarPlatilloXCategoria_Nombre(int estado, int categoria,string nombre)
         {
             List<Platillo> platillos = null;
 
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarPlatilloXCategoria";
+            cmd.CommandText = "sp_ListarPlatilloXCategoria_Nombre";
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Connection = conexion;
 
@@ -31,6 +31,7 @@ namespace RestauranteInteligente.Datos
 
             cmd.Parameters.AddWithValue("@estado", estado);
             cmd.Parameters.AddWithValue("@categoria", categoria);
+            cmd.Parameters.AddWithValue("@nombre", nombre);
 
             SqlDataReader lector = cmd.ExecuteReader();
 
@@ -55,6 +56,7 @@ namespace RestauranteInteligente.Datos
             conexion.Close();
             return platillos;
         }
+
 
         public Platillo ListarPlatilloXId(int id)
         {

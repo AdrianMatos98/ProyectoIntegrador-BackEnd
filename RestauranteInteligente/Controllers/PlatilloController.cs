@@ -19,11 +19,12 @@ namespace RestauranteInteligente.Controllers
         {
             platilloNegocios = new PlatilloNegocios();
         }
+        
 
         [HttpGet]
-        public List<Platillo> ListarPlatilloXCategoria(int estado, int categoria)
+        public List<Platillo> ListarPlatilloXCategoria_Nombre(int estado, int categoria,string nombre)
         {
-            return platilloNegocios.ListarPlatilloXCategoria(estado, categoria);
+            return platilloNegocios.ListarPlatilloXCategoria_Nombre(estado, categoria, nombre);
 
         }
 

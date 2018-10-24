@@ -228,6 +228,7 @@ go
 EXEC sp_ListarCategoriaXId 1
 GO
 
+
 create proc sp_ActualizarCategoria(@id int, @descripcion varchar(25))
 as
 begin
@@ -292,16 +293,18 @@ exec sp_AgregarPlatillo 'Platillo1','Descripcion1',99.99,1
 exec sp_AgregarPlatillo 'Platillo1','Descripcion1',99.99,1
 go
 
-create proc sp_ListarPlatilloXCategoria(@estado int,@categoria int)
+
+
+create proc sp_ListarPlatilloXCategoria_Nombre(@estado int,@categoria int,@nombre varchar(25))
 as
 begin
 	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA
 	from TB_PLATILLO p inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA=c.CODIGO_CATEGORIA
-	where ESTADO_PLATILLO = @estado AND p.CODIGO_CATEGORIA = @categoria
+	where ESTADO_PLATILLO = @estado AND p.CODIGO_CATEGORIA = @categoria AND P.NOMBRE_PLATILLO LIKE ('%'+@nombre+'%')
 end
 go
 
-EXEC sp_ListarPlatilloXCategoria 1,1
+EXEC sp_ListarPlatilloXCategoria_Nombre 1,1,null
 GO
 
 
