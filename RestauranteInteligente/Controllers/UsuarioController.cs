@@ -1,4 +1,5 @@
 ﻿using RestauranteInteligente.Modelos;
+using RestauranteInteligente.Models;
 using RestauranteInteligente.Negocios;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,13 @@ namespace RestauranteInteligente.Controllers
         public string RestaurarUsuario(int id)
         {
             return usuarioNegocios.RestaurarUsuario(id);
+
+        }
+
+        [HttpPost]
+        public Usuario Login(UsuarioViewModel modelo)
+        {
+            return usuarioNegocios.Login(modelo.nombre,modelo.password);
 
         }
     }

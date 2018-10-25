@@ -2,6 +2,7 @@
 using RestauranteInteligente.Modelos;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,9 +40,14 @@ namespace RestauranteInteligente.Negocios
                 msj = "Usuario agregado";
 
             }
+            catch (SqlException ex)
+            {
+                if(ex.Number == 2627)
+                msj = "No se agrego el usuario : Ya existe un usuario con el mismo nombre";
+            }
             catch (Exception ex)
             {
-                msj = "No se agrego el usuario : " + ex.Message;
+                msj = "No se agrego el usuario : " + ex.Message + ex.StackTrace;
             }
             return msj;
         }
@@ -55,6 +61,11 @@ namespace RestauranteInteligente.Negocios
                 Datos.ActualizarUsuario(usuario);
                 msj = "Usuario actualizado";
 
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627)
+                    msj = "No se agrego el usuario : Ya existe un usuario con el mismo nombre";
             }
             catch (Exception ex)
             {
@@ -95,6 +106,12 @@ namespace RestauranteInteligente.Negocios
                 msj = "No se restauro el usuario : " + ex.Message;
             }
             return msj;
+        }
+
+        public Usuario Login(string nombre,string password)
+        {
+
+            return Datos.Login(nombre,password);
         }
     }
 }

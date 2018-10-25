@@ -97,7 +97,7 @@ GO
 /*************************Mantenimiento usuario********************************/
 create table TB_USUARIO(
 	CODIGO_USUARIO int identity(1,1) primary key,
-	NOMBRE_USUARIO varchar(25),
+	NOMBRE_USUARIO varchar(25) unique,
 	PASSWORD_USUARIO VARBINARY(50),
 	ESTADO_USUARIO int default(1),
 	CODIGO_TIPO int references TB_TIPO
@@ -149,7 +149,7 @@ begin
 end
 go
 
-exec sp_ActualizarUsuario 1,'COCINA1','123456789',2
+exec sp_ActualizarUsuario 1,'COCINA1','12345678',2
 go
 
 EXEC sp_ListarUsuarioXId 1
@@ -179,6 +179,19 @@ EXEC sp_RestaurarUsuario 1
 GO
 
 EXEC sp_ListarUsuarioXId 1
+GO
+
+
+create proc sp_Login(@nombre varchar(25),@password char(8))
+as
+begin
+	select u.CODIGO_USUARIO as CODIGO_USUARIO,u.NOMBRE_USUARIO as NOMBRE_USUARIO,u.ESTADO_USUARIO as ESTADO_USUARIO,u.CODIGO_TIPO as CODIGO_TIPO,t.DESCRIPCION_TIPO as DESCRIPCION_TIPO
+	from TB_USUARIO u inner join TB_TIPO t on u.CODIGO_TIPO=t.CODIGO_TIPO
+	where u.NOMBRE_USUARIO = @nombre and u.PASSWORD_USUARIO = cast(@password as varbinary(50))
+end
+go
+
+EXEC sp_Login 'COCINA1','12345678'
 GO
 /*************************Mantenimiento usuario********************************/
 

@@ -158,5 +158,42 @@ namespace RestauranteInteligente.Datos
 
             conexion.Close();
         }
+
+        public Usuario Login(string nombre, string password)
+        {
+
+            Usuario usuario = null;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "sp_Login";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Connection = conexion;
+
+            conexion.Open();
+
+            cmd.Parameters.AddWithValue("@nombre", nombre);
+            cmd.Parameters.AddWithValue("@password", password);
+
+            SqlDataReader lector = cmd.ExecuteReader();
+
+            if (lector.HasRows)
+            {
+                usuario = new Usuario();
+                var _tipo = new Tipo();
+                while (lector.Read())
+                {
+
+                    usuario.codigo = int.Parse(lector["CODIGO_USUARIO"].ToString());
+                    usuario.nombre = lector["NOMBRE_USUARIO"].ToString();
+                    usuario.estado = int.Parse(lector["ESTADO_USUARIO"].ToString());
+                    _tipo.codigo = int.Parse(lector["CODIGO_TIPO"].ToString());
+                    _tipo.descripcion = lector["DESCRIPCION_TIPO"].ToString();
+                    usuario.tipo = _tipo;
+                }
+            }
+
+            conexion.Close();
+            return usuario;
+        }
     }
 }
