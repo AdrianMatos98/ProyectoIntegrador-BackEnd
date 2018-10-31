@@ -47,7 +47,7 @@ namespace RestauranteInteligente.Negocios
             }
             catch (Exception ex)
             {
-                msj = "No se agrego el usuario : " + ex.Message + ex.StackTrace;
+                msj = "No se agrego el usuario : " + ex.Message;
             }
             return msj;
         }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CategoriaDatos.cs" />
     <Compile Include="Conexion.cs" />
+    <Compile Include="PedidoDatos.cs" />
     <Compile Include="PlatilloDatos.cs" />
     <Compile Include="TipoDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
