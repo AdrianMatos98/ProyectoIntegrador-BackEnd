@@ -86,6 +86,7 @@ namespace RestauranteInteligente.Datos
                     platillo.descripcion = lector["DESCRIPCION_PLATILLO"].ToString();
                     platillo.precio = decimal.Parse(lector["PRECIO_PLATILLO"].ToString());
                     platillo.estado = int.Parse(lector["ESTADO_PLATILLO"].ToString());
+                    platillo.imagen = lector["IMAGEN_PLATILLO"].ToString();
                     _categoria.codigo = int.Parse(lector["CODIGO_CATEGORIA"].ToString());
                     _categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
                     platillo.categoria = _categoria;
@@ -110,6 +111,7 @@ namespace RestauranteInteligente.Datos
             cmd.Parameters.AddWithValue("@descripcion", platillo.descripcion);
             cmd.Parameters.AddWithValue("@precio", platillo.precio);
             cmd.Parameters.AddWithValue("@categoria", platillo.categoria.codigo);
+            cmd.Parameters.AddWithValue("@imagen", platillo.imagen);
 
             cmd.ExecuteNonQuery();
 
@@ -130,6 +132,7 @@ namespace RestauranteInteligente.Datos
             cmd.Parameters.AddWithValue("@descripcion", platillo.descripcion);
             cmd.Parameters.AddWithValue("@precio", platillo.precio);
             cmd.Parameters.AddWithValue("@categoria", platillo.categoria.codigo);
+            cmd.Parameters.AddWithValue("@imagen", platillo.imagen);
 
             cmd.ExecuteNonQuery();
 

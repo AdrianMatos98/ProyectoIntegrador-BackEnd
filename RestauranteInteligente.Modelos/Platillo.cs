@@ -14,6 +14,7 @@ namespace RestauranteInteligente.Modelos
         public decimal precio { get; set; }
         public int estado { get; set; }
         public Categoria categoria { get; set; }
+        public string imagen { get; set; }
 
         public void Validar()
         {
@@ -33,6 +34,8 @@ namespace RestauranteInteligente.Modelos
                 throw new Exception("El máximo precio aceptable es 99999999.99");
             if (categoria.codigo == 0)
                 throw new Exception("Categoria es requerido");
+            if (string.IsNullOrEmpty(imagen))
+                throw new Exception("Imagen es requerido");
         }
     }
 }

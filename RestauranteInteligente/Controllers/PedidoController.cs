@@ -61,15 +61,27 @@ namespace RestauranteInteligente.Controllers
         {
             ValidarPagoResponse response = new ValidarPagoResponse();
             string mensaje = "";
-            response.TransaccionCompleta
-                = pedidoNegocios.ValidarPago(out mensaje,
+
+            try
+            {
+                request.Validar();
+
+                response.TransaccionCompleta = pedidoNegocios.ValidarPago(out mensaje,
                                         request.TipoTarjeta, request.NumeroTarjeta,
                                         request.TitularTarjeta, request.MontoConsumir,
                                         request.MesExpiracionTarjeta, request.AñoExpiracionTarjeta,
                                         request.CodigoSeguridadTarjeta);
-            response.TransaccionMensaje = mensaje;
+                response.TransaccionMensaje = mensaje;
 
-            return response;
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.TransaccionCompleta = false;
+                response.TransaccionMensaje = ex.Message;
+                return response;
+            }
         }
 
     }
