@@ -1,4 +1,5 @@
 ﻿using RestauranteInteligente.Datos;
+using RestauranteInteligente.Datos.Interfaces;
 using RestauranteInteligente.Modelos;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace RestauranteInteligente.Negocios
 {
     public class PedidoNegocios
     {
-        private PedidoDatos Datos;
+        private IPedidoDatos Datos;
 
         public PedidoNegocios()
         {
@@ -44,6 +45,92 @@ namespace RestauranteInteligente.Negocios
                 msj = "No se agrego el pedido : " + ex.Message;
             }
             return msj;
+        }
+
+        public List<Pedido> ListarPedidoXEstado(int estado)
+        {
+
+            return Datos.ListarPedidoXEstado(estado);
+        }
+
+        public List<DetallePedido> ListarDetallePedido(int pedido)
+        {
+
+            return Datos.ListarDetallePedido(pedido);
+        }
+
+        public List<Pedido> ListarPedidoXFechas(DateTime fecha1, DateTime fecha2)
+        {
+
+            return Datos.ListarPedidoXFechas(fecha1,fecha2);
+        }
+
+        public string ActualizarEstadoPedido(int codigo)
+        {
+            string msj = "";
+            try
+            {
+                Datos.ActualizarEstadoPedido(codigo);
+                msj = "Pedido actualizado";
+
+            }
+            catch (Exception ex)
+            {
+                msj = "No se actualizo el pedido : " + ex.Message;
+            }
+            return msj;
+        }
+
+        public bool ValidarPago(out string mensaje,
+                                int tipoTarjeta,
+                                string numeroTarjeta,
+                                string titularTarjeta,
+                                double montoConsumir,
+                                string mesExpiracion,
+                                string añoExpiracion,
+                                string codigoSeguridad
+                                )
+        {
+            bool ValidacionCorrecta = false;
+            mensaje = "";
+
+
+
+            //verificar que la tarjeta exista
+
+            //llamar a la capa de datos
+            TarjetaInfo tarjetaInfo = Datos.ObtenerInformacionTarjeta(tipoTarjeta, numeroTarjeta, titularTarjeta,
+                                                    mesExpiracion, añoExpiracion, codigoSeguridad);
+
+            //validar que la tarjeta exista
+            if (tarjetaInfo == null)
+            {
+                mensaje = "Tarjeta no Existe";
+            }
+            //la tarjeta existe
+            else
+            {
+                //validar que la tarjeta este habilitada
+                if (!tarjetaInfo.tarjetaHabilitada)
+                {
+                    mensaje = "Tarjeta No Habilitada";
+                }
+                //si la tarjeta no esta deshabilitada
+                else
+                {
+                    // disponible : 99 , monto : 100
+                    if (tarjetaInfo.creditoDisponible < montoConsumir)
+                    {
+                        mensaje = "Linea de credito insuficiente";
+                    }
+                    else
+                    {
+                        ValidacionCorrecta = true;
+                    }
+                }
+            }
+
+            return ValidacionCorrecta;
         }
     }
 }

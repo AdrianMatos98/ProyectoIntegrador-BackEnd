@@ -1,4 +1,5 @@
-﻿using RestauranteInteligente.Modelos;
+﻿using RestauranteInteligente.Datos.Interfaces;
+using RestauranteInteligente.Modelos;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RestauranteInteligente.Datos
 {
-    public class PlatilloDatos
+    public class PlatilloDatos : IPlatilloDatos
     {
         SqlConnection conexion;
 

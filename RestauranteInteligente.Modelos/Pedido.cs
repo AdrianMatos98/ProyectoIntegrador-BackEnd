@@ -13,7 +13,8 @@ namespace RestauranteInteligente.Modelos
         public DateTime fecha { get; set; }
         public int estado { get; set; }
         public decimal total { get; set; }
-        public DetallePedido[] detallePedido { get; set; }
+        public List<DetallePedido> detallePedido { get; set; }
+        
 
         public void Validar()
         {
@@ -24,5 +25,6 @@ namespace RestauranteInteligente.Modelos
             if (total== 0)
                 throw new Exception("Total es requerido");
         }
+          
     }
 }

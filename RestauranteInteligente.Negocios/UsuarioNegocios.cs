@@ -1,4 +1,5 @@
 ﻿using RestauranteInteligente.Datos;
+using RestauranteInteligente.Datos.Interfaces;
 using RestauranteInteligente.Modelos;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace RestauranteInteligente.Negocios
 {
     public class UsuarioNegocios
     {
-        private UsuarioDatos Datos;
+        private IUsuarioDatos Datos;
 
         public UsuarioNegocios()
         {

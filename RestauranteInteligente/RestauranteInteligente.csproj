@@ -199,6 +199,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\UsuarioViewModel.cs" />
+    <Compile Include="Models\ValidarPagoRequest.cs" />
+    <Compile Include="Models\ValidarPagoResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

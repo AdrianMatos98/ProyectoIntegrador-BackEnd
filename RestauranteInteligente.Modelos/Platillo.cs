@@ -27,6 +27,8 @@ namespace RestauranteInteligente.Modelos
                 throw new Exception("Descripción tiene un máximo de 500 caracteres");
             if (precio==0)
                 throw new Exception("Precio es requerido");
+            else if (precio < 0)
+                throw new Exception("El mínimo precio aceptable es 1.00");
             else if (precio>=100000000)
                 throw new Exception("El máximo precio aceptable es 99999999.99");
             if (categoria.codigo == 0)
