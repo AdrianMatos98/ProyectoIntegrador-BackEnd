@@ -166,46 +166,6 @@ namespace RestauranteInteligente.Datos
             return detallePedidos;
         }
 
-
-        public List<Pedido> ListarPedidoXFechas(DateTime fecha1,DateTime fecha2)
-        {
-            List<Pedido> pedidos = null;
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "sp_ListarPedidosXFechas";
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Connection = conexion;
-
-            conexion.Open();
-
-            cmd.Parameters.AddWithValue("@fecha1", fecha1);
-            cmd.Parameters.AddWithValue("@fecha2", fecha2);
-
-            SqlDataReader lector = cmd.ExecuteReader();
-
-            if (lector.HasRows)
-            {
-                pedidos = new List<Pedido>();
-                while (lector.Read())
-                {
-                    var pedido = new Pedido();
-                    var _usuario = new Usuario();
-                    pedido.codigo = int.Parse(lector["CODIGO_PEDIDO"].ToString());
-                    _usuario.codigo = int.Parse(lector["CODIGO_USUARIO"].ToString());
-                    _usuario.nombre = lector["NOMBRE_USUARIO"].ToString();
-                    pedido.usuario = _usuario;
-                    pedido.estado = int.Parse(lector["ESTADO_PEDIDO"].ToString());
-                    pedido.fecha = DateTime.Parse(lector["FECHA_PEDIDO"].ToString());
-                    pedido.total = decimal.Parse(lector["TOTAL_PEDIDO"].ToString());
-                    pedido.detallePedido = new List<DetallePedido>();
-                    pedidos.Add(pedido);
-                }
-            }
-
-            conexion.Close();
-            return pedidos;
-        }
-
         public void ActualizarEstadoPedido(int codigo)
         {
             SqlCommand cmd = new SqlCommand();

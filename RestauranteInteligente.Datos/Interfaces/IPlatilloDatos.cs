@@ -22,6 +22,8 @@ namespace RestauranteInteligente.Datos.Interfaces
         void EliminarPlatillo(int id);
 
         void RestaurarPlatillo(int id);
+
+
     }
 
 }

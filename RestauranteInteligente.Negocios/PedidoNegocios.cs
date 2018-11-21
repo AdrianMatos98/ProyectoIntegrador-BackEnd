@@ -59,12 +59,6 @@ namespace RestauranteInteligente.Negocios
             return Datos.ListarDetallePedido(pedido);
         }
 
-        public List<Pedido> ListarPedidoXFechas(DateTime fecha1, DateTime fecha2)
-        {
-
-            return Datos.ListarPedidoXFechas(fecha1,fecha2);
-        }
-
         public string ActualizarEstadoPedido(int codigo)
         {
             string msj = "";

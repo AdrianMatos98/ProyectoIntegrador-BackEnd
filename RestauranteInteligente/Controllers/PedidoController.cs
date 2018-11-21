@@ -41,13 +41,7 @@ namespace RestauranteInteligente.Controllers
             return pedidoNegocios.ListarDetallePedido(pedido);
 
         }
-
-        [HttpGet]
-        public List<Pedido> ListarPedidoXFechas(DateTime fecha1, DateTime fecha2)
-        {
-            return pedidoNegocios.ListarPedidoXFechas(fecha1,fecha2);
-
-        }
+        
 
         [HttpPut]
         public string ActualizarEstadoPedido(int id)

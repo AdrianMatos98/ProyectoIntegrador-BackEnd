@@ -45,6 +45,7 @@
     <Compile Include="DetallePedido.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="Platillo.cs" />
+    <Compile Include="ReporteTopPlatillos.cs" />
     <Compile Include="TarjetaInfo.cs" />
     <Compile Include="Tipo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

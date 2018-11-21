@@ -45,11 +45,13 @@
     <Compile Include="Conexion.cs" />
     <Compile Include="Interfaces\ICategoriaDatos.cs" />
     <Compile Include="Interfaces\IPlatilloDatos.cs" />
+    <Compile Include="Interfaces\IReporteDatos.cs" />
     <Compile Include="Interfaces\ITipoDatos.cs" />
     <Compile Include="Interfaces\IUsuarioDatos.cs" />
     <Compile Include="Interfaces\IPedidoDatos.cs" />
     <Compile Include="PedidoDatos.cs" />
     <Compile Include="PlatilloDatos.cs" />
+    <Compile Include="ReporteDatos.cs" />
     <Compile Include="TipoDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsuarioDatos.cs" />

@@ -15,9 +15,7 @@ namespace RestauranteInteligente.Datos.Interfaces
         List<Pedido> ListarPedidoXEstado(int estado);
 
         List<DetallePedido> ListarDetallePedido(int pedido);
-
-        List<Pedido> ListarPedidoXFechas(DateTime fecha1, DateTime fecha2);
-
+        
         void ActualizarEstadoPedido(int codigo);
 
         TarjetaInfo ObtenerInformacionTarjeta(int tipoTarjeta, string numeroTarjeta, string titularTarjeta, string mesExpiracion, string añoExpiracion, string codigoSeguridad);

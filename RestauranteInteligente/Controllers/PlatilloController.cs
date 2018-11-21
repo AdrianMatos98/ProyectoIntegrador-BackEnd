@@ -62,5 +62,6 @@ namespace RestauranteInteligente.Controllers
             return platilloNegocios.RestaurarPlatillo(id);
 
         }
+        
     }
 }
