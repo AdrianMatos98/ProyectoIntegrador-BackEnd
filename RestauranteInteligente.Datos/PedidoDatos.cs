@@ -68,7 +68,7 @@ namespace RestauranteInteligente.Datos
                     }
                     
                     sqlTran.Commit();
-                    return "";
+                    return ""+codigoPedido;
                 }
                 catch (Exception ex)
                 {

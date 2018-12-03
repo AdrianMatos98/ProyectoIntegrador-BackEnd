@@ -43,6 +43,7 @@ namespace RestauranteInteligente.Datos
                     categoria.codigo = int.Parse(lector["CODIGO_CATEGORIA"].ToString());
                     categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
                     categoria.estado = int.Parse(lector["ESTADO_CATEGORIA"].ToString());
+                    categoria.imagen = lector["IMAGEN_CATEGORIA"].ToString();
                     tipos.Add(categoria);
                 }
             }
@@ -74,6 +75,7 @@ namespace RestauranteInteligente.Datos
                     categoria.codigo = int.Parse(lector["CODIGO_CATEGORIA"].ToString());
                     categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
                     categoria.estado = int.Parse(lector["ESTADO_CATEGORIA"].ToString());
+                    categoria.imagen = lector["IMAGEN_CATEGORIA"].ToString();
                 }
             }
 
@@ -92,6 +94,7 @@ namespace RestauranteInteligente.Datos
             conexion.Open();
 
             cmd.Parameters.AddWithValue("@descripcion", categoria.descripcion);
+            cmd.Parameters.AddWithValue("@imagen", categoria.imagen);
 
             cmd.ExecuteNonQuery();
 
@@ -109,6 +112,7 @@ namespace RestauranteInteligente.Datos
 
             cmd.Parameters.AddWithValue("@id", categoria.codigo);
             cmd.Parameters.AddWithValue("@descripcion", categoria.descripcion);
+            cmd.Parameters.AddWithValue("@imagen", categoria.imagen);
 
             cmd.ExecuteNonQuery();
 

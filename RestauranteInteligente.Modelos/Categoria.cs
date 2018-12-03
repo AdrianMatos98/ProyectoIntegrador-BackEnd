@@ -11,6 +11,7 @@ namespace RestauranteInteligente.Modelos
         public int codigo { get; set; }
         public string descripcion { get; set; }
         public int estado { get; set; }
+        public string imagen { get; set; }
 
         public void Validar()
         {
@@ -18,6 +19,10 @@ namespace RestauranteInteligente.Modelos
                 throw new Exception("Descripcion es requerido");
             else if (descripcion.Length > 25)
                 throw new Exception("Descripción tiene un máximo de 25 caracteres");
+            if (string.IsNullOrEmpty(imagen))
+                throw new Exception("Imagen es requerido");
+            else if (imagen.Length > 500)
+                throw new Exception("Imagen tiene un máximo de 500 caracteres");
         }
     }
 }

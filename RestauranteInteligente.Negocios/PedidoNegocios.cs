@@ -30,6 +30,15 @@ namespace RestauranteInteligente.Negocios
                     dp.Validar();
                 }
                 string res = Datos.AgregarPedido(pedido);
+                try
+                {
+                    var x = int.Parse(res);
+                    msj = "Pedido "+res+" agregado";
+                }
+                catch (Exception e)
+                {
+                    msj = "No se agrego el pedido : " + res;
+                }/*
                 if (res.Equals(""))
                 {
                     msj = "Pedido agregado";
@@ -37,7 +46,7 @@ namespace RestauranteInteligente.Negocios
                 else
                 {
                     msj = "No se agrego el pedido : " + res;
-                }
+                }*/
 
             }
             catch (Exception ex)

@@ -62,7 +62,7 @@ begin
 end
 go
 
-exec sp_ActualizarTipo 3,'ADMINISTRADOR'
+exec sp_ActualizarTipo 1,'ADMINISTRADOR'
 go
 
 EXEC sp_ListarTipo 0
@@ -202,30 +202,31 @@ GO
 create table TB_CATEGORIA(
 	CODIGO_CATEGORIA int identity(1,1) primary key,
 	DESCRIPCION_CATEGORIA varchar(25),
-	ESTADO_CATEGORIA int default(1)
+	ESTADO_CATEGORIA int default(1),
+	IMAGEN_CATEGORIA varchar(500)
 )
 go
 
 SELECT * FROM TB_CATEGORIA
 GO
 
-create proc sp_AgregarCategoria(@descripcion varchar(25))
+create proc sp_AgregarCategoria(@descripcion varchar(25),@imagen varchar(500))
 as
 begin
-	insert into TB_CATEGORIA(DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA) values (@descripcion,DEFAULT)
+	insert into TB_CATEGORIA(DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA,IMAGEN_CATEGORIA) values (@descripcion,DEFAULT,@imagen)
 end
 go
 
-exec sp_AgregarCategoria 'CRIOLLO'
-exec sp_AgregarCategoria 'POSTRES'
-exec sp_AgregarCategoria 'BEDIDAS'
-exec sp_AgregarCategoria 'SOPA'
+exec sp_AgregarCategoria 'CRIOLLO','http://significadosdelossuenos.net/wp-content/uploads/2017/02/So%C3%B1ar-con-carnes-asadas.jpg'
+exec sp_AgregarCategoria 'POSTRES','http://significadosdelossuenos.net/wp-content/uploads/2017/02/So%C3%B1ar-con-carnes-asadas.jpg'
+exec sp_AgregarCategoria 'BEDIDAS','http://significadosdelossuenos.net/wp-content/uploads/2017/02/So%C3%B1ar-con-carnes-asadas.jpg'
+exec sp_AgregarCategoria 'SOPA','http://significadosdelossuenos.net/wp-content/uploads/2017/02/So%C3%B1ar-con-carnes-asadas.jpg'
 go
 
 create proc sp_ListarCategoria(@estado int)
 as
 begin
-	select CODIGO_CATEGORIA,DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA from TB_CATEGORIA where ESTADO_CATEGORIA = @estado
+	select CODIGO_CATEGORIA,DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA,IMAGEN_CATEGORIA from TB_CATEGORIA where ESTADO_CATEGORIA = @estado
 end
 go
 
@@ -237,7 +238,7 @@ GO
 create proc sp_ListarCategoriaXId(@id int)
 as
 begin
-	select CODIGO_CATEGORIA,DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA from TB_CATEGORIA where CODIGO_CATEGORIA= @id
+	select CODIGO_CATEGORIA,DESCRIPCION_CATEGORIA,ESTADO_CATEGORIA,IMAGEN_CATEGORIA from TB_CATEGORIA where CODIGO_CATEGORIA= @id
 end
 go
 
@@ -245,14 +246,14 @@ EXEC sp_ListarCategoriaXId 1
 GO
 
 
-create proc sp_ActualizarCategoria(@id int, @descripcion varchar(25))
+create proc sp_ActualizarCategoria(@id int, @descripcion varchar(25),@imagen varchar(500))
 as
 begin
-	update TB_CATEGORIA set DESCRIPCION_CATEGORIA = @descripcion where CODIGO_CATEGORIA = @id
+	update TB_CATEGORIA set DESCRIPCION_CATEGORIA = @descripcion, IMAGEN_CATEGORIA = @imagen  where CODIGO_CATEGORIA = @id
 end
 go
 
-exec sp_ActualizarCategoria 3,'BEBIDAS ALCOHOLICAS'
+exec sp_ActualizarCategoria 3,'BEBIDAS ALCOHOLICAS','http://significadosdelossuenos.net/wp-content/uploads/2017/02/So%C3%B1ar-con-carnes-asadas.jpg'
 go
 
 EXEC sp_ListarCategoriaXId 3
@@ -315,7 +316,8 @@ go
 create proc sp_ListarPlatilloXCategoria_Nombre(@estado int,@categoria int,@nombre varchar(25))
 as
 begin
-	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA
+	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, 
+	p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
 	from TB_PLATILLO p inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA=c.CODIGO_CATEGORIA
 	where ESTADO_PLATILLO = @estado AND p.CODIGO_CATEGORIA = @categoria AND P.NOMBRE_PLATILLO LIKE ('%'+@nombre+'%')
 end
@@ -328,7 +330,8 @@ GO
 create proc sp_ListarPlatilloXId(@id int)
 as
 begin
-	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
+	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO,
+	 p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
 	from TB_PLATILLO p inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA=c.CODIGO_CATEGORIA
 	where p.CODIGO_PLATILLO = @id
 end
@@ -467,10 +470,6 @@ begin
 end
 go
 
-insert into TB_DETALLEPEDIDO (CODIGO_PEDIDO,CODIGO_PLATILLO,CANTIDAD) values (1,5,25)
-insert into TB_DETALLEPEDIDO (CODIGO_PEDIDO,CODIGO_PLATILLO,CANTIDAD) values (1,6,1)
-insert into TB_DETALLEPEDIDO (CODIGO_PEDIDO,CODIGO_PLATILLO,CANTIDAD) values (1,7,9)
-insert into TB_DETALLEPEDIDO (CODIGO_PEDIDO,CODIGO_PLATILLO,CANTIDAD) values (1,8,2)
 
 EXEC sp_ListarPlatillosXFechas '2018/10/01','2018/12/01'
 GO
@@ -534,7 +533,7 @@ select * from TB_PLATILLO
 /********************************Data ***************************************/
 execute dbo.sp_EliminarPlatillo '1';
 execute dbo.sp_EliminarPlatillo '2';
-execute dbo.sp_AgregarCategoria 'ENTRADAS'
+execute dbo.sp_AgregarCategoria 'ENTRADAS',null
 use restauranteInteligente
 --ENTREDAS--
 INSERT INTO TB_PLATILLO VALUES('Anticuchos de Corazón','El anticucho es un tipo de brocheta de origen peruano, ​ que también es popular en algunos países sudamericanos con diferentes variaciones por país. Consiste en carne y otros alimentos que se asan ensartados en un pincho',10,1,5,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
@@ -609,25 +608,25 @@ INSERT INTO TB_PLATILLO VALUES('Sopa de Vegetales Tofu','Sabe muy bien elíjalo 
 
 
 --POSTRES--
-INSERT INTO TB_PLATILLO VALUES('Alfajores con Manjarblnco','Alfajores artesanales de maicena y dulce de leche',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Alfajores de Miel','Esta tradicional masa es la preferida de miles de argentinos, aunque no podemos titularnos como los inventores, ya que como el turrón, el almíbar o el mazapán, el alfajor es un invento culinario antiquísimo de origen árabe. La palabra deriva del árabe “al-hasú” que significa “relleno”.',3,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Arroz con Leche','Arroz con leche. Postre típico de la gastronomía de múltiples países hecho cociendo lentamente el arrozen leche con azúcar. Se come frío o caliente. Se le suele echar canela, vainilla o cáscara de limón para aromatizarlo.',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Arroz Zambito','El arroz zambito es un postre peruano, derivado del arroz con leche,  siendo el principal ingrediente la chancaca, el cual le otorga el característico color marrón, de ello la razón del nombre.',4,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Bizcocho de Limón','Este postre es muy típico, sobre todo en Francia, y se ha hecho por abuelas durante generaciones. La parte de la historia que me gusta es que estas abuelas francesas miden los ingredientes del bizcocho con los tarros de yogur.',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Bizcochos','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Bocadillo de Dama','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Alfajores con Manjarblnco','Alfajores artesanales de maicena y dulce de leche',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Alfajores de Miel','Esta tradicional masa es la preferida de miles de argentinos, aunque no podemos titularnos como los inventores, ya que como el turrón, el almíbar o el mazapán, el alfajor es un invento culinario antiquísimo de origen árabe. La palabra deriva del árabe “al-hasú” que significa “relleno”.',3,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Arroz con Leche','Arroz con leche. Postre típico de la gastronomía de múltiples países hecho cociendo lentamente el arrozen leche con azúcar. Se come frío o caliente. Se le suele echar canela, vainilla o cáscara de limón para aromatizarlo.',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Arroz Zambito','El arroz zambito es un postre peruano, derivado del arroz con leche,  siendo el principal ingrediente la chancaca, el cual le otorga el característico color marrón, de ello la razón del nombre.',4,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Bizcocho de Limón','Este postre es muy típico, sobre todo en Francia, y se ha hecho por abuelas durante generaciones. La parte de la historia que me gusta es que estas abuelas francesas miden los ingredientes del bizcocho con los tarros de yogur.',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Bizcochos','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Bocadillo de Dama','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Borrachitos','Sabe muy bien elíjalo para su deguste',3,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Bombas de Sémola','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Borrachitos de Chocolate','Sabe muy bien elíjalo para su deguste',3,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Budín de Chancay','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Brownies','Sabe muy bien elíjalo para su deguste',4,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Budín Navideño','Sabe muy bien elíjalo para su deguste',6,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Budin de Pan','Sabe muy bien elíjalo para su deguste',4,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Buñuelos','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Cake Volteado de Piña','Sabe muy bien elíjalo para su deguste',6,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Cachangas','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Camote con Dulce','Sabe muy bien elíjalo para su deguste',3,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Camotillo','Sabe muy bien elíjalo para su deguste',4,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Borrachitos de Chocolate','Sabe muy bien elíjalo para su deguste',3,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Budín de Chancay','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Brownies','Sabe muy bien elíjalo para su deguste',4,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Budín Navideño','Sabe muy bien elíjalo para su deguste',6,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Budin de Pan','Sabe muy bien elíjalo para su deguste',4,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Buñuelos','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Cake Volteado de Piña','Sabe muy bien elíjalo para su deguste',6,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Cachangas','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Camote con Dulce','Sabe muy bien elíjalo para su deguste',3,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Camotillo','Sabe muy bien elíjalo para su deguste',4,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Champús de Guanábana','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 
 
@@ -653,3 +652,4 @@ INSERT INTO TB_PLATILLO VALUES('Tom Collins','El Tom Collins aparecía en 1876 e
 INSERT INTO TB_PLATILLO VALUES('Negroni','Cuando llega la Navidad, los más pequeños de la casa piensan en los regalos y los más mayores en la comida que deben preparar para sus invitados. Una forma original y sencilla de empezar esas veladas es con un cocktail de aperitivo. Como el Negroni. El Negroni es ideal para estas fechas... ',11,1,3,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Hurricane','El origen de esta bebida se atribuye al señor Pat OBrien, propietario de un bar a su nombre en la ciudad más grande del estado de Louisiana. Al parecer, OBrien acababa de abrir el bar y sólo tenía acceso a determinados licores, entre ellos el ron, que estableció como base para crear una bebida...',13,1,3,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 
+select * from TB_TIPO

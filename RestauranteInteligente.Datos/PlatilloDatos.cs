@@ -48,6 +48,7 @@ namespace RestauranteInteligente.Datos
                     platillo.descripcion = lector["DESCRIPCION_PLATILLO"].ToString();
                     platillo.precio = decimal.Parse(lector["PRECIO_PLATILLO"].ToString());
                     platillo.estado = int.Parse(lector["ESTADO_PLATILLO"].ToString());
+                    platillo.imagen = lector["IMAGEN_PLATILLO"].ToString();
                     _categoria.descripcion = lector["DESCRIPCION_CATEGORIA"].ToString();
                     platillo.categoria = _categoria;
                     platillos.Add(platillo);

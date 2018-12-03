@@ -36,6 +36,8 @@ namespace RestauranteInteligente.Modelos
                 throw new Exception("Categoria es requerido");
             if (string.IsNullOrEmpty(imagen))
                 throw new Exception("Imagen es requerido");
+            else if(imagen.Length>500)
+                throw new Exception("Imagen tiene un máximo de 500 caracteres");
         }
     }
 }
