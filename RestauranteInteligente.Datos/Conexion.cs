@@ -8,6 +8,6 @@ namespace RestauranteInteligente.Datos
 {
     class Conexion
     {
-        public const string cadenaConexion = "Data Source=DESKTOP-NTN58D0;Initial Catalog=restauranteInteligente;Integrated Security=True";
+        public const string cadenaConexion = "Data Source=.;Initial Catalog=restauranteInteligente;Integrated Security=True";
     }
 }

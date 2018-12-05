@@ -123,7 +123,8 @@ go
 create proc sp_ListarUsuarioXTipo(@estado int,@tipo int)
 as
 begin
-	select u.CODIGO_USUARIO as CODIGO_USUARIO,u.NOMBRE_USUARIO as NOMBRE_USUARIO,u.ESTADO_USUARIO as ESTADO_USUARIO,t.DESCRIPCION_TIPO as DESCRIPCION_TIPO
+	select u.CODIGO_USUARIO as CODIGO_USUARIO,u.NOMBRE_USUARIO as NOMBRE_USUARIO,
+	u.ESTADO_USUARIO as ESTADO_USUARIO,t.DESCRIPCION_TIPO as DESCRIPCION_TIPO
 	from TB_USUARIO u inner join TB_TIPO t on u.CODIGO_TIPO=t.CODIGO_TIPO
 	where ESTADO_USUARIO = @estado AND u.CODIGO_TIPO = @tipo
 end
@@ -300,10 +301,13 @@ go
 SELECT * FROM TB_PLATILLO
 GO
 
-create proc sp_AgregarPlatillo(@nombre varchar(25),@descripcion varchar(500),@precio decimal(10,2),@categoria int,@imagen varchar(500))
+create proc sp_AgregarPlatillo(@nombre varchar(25),@descripcion varchar(500),
+@precio decimal(10,2),@categoria int,@imagen varchar(500))
 as
 begin
-	insert into TB_PLATILLO (NOMBRE_PLATILLO,DESCRIPCION_PLATILLO,PRECIO_PLATILLO,ESTADO_PLATILLO,CODIGO_CATEGORIA,IMAGEN_PLATILLO) values (@nombre,@descripcion,@precio,DEFAULT,@categoria,@imagen)
+	insert into TB_PLATILLO (NOMBRE_PLATILLO,DESCRIPCION_PLATILLO,
+	PRECIO_PLATILLO,ESTADO_PLATILLO,CODIGO_CATEGORIA,IMAGEN_PLATILLO) 
+	values (@nombre,@descripcion,@precio,DEFAULT,@categoria,@imagen)
 end
 go
 
@@ -316,8 +320,10 @@ go
 create proc sp_ListarPlatilloXCategoria_Nombre(@estado int,@categoria int,@nombre varchar(25))
 as
 begin
-	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, 
-	p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
+	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,
+	p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO, 
+	p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,
+	c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
 	from TB_PLATILLO p inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA=c.CODIGO_CATEGORIA
 	where ESTADO_PLATILLO = @estado AND p.CODIGO_CATEGORIA = @categoria AND P.NOMBRE_PLATILLO LIKE ('%'+@nombre+'%')
 end
@@ -330,8 +336,11 @@ GO
 create proc sp_ListarPlatilloXId(@id int)
 as
 begin
-	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO,
-	 p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,c.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
+	select p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,
+	p.DESCRIPCION_PLATILLO as DESCRIPCION_PLATILLO,
+	 p.PRECIO_PLATILLO as PRECIO_PLATILLO, p.ESTADO_PLATILLO  as ESTADO_PLATILLO,
+	 c.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,
+	 p.IMAGEN_PLATILLO as IMAGEN_PLATILLO
 	from TB_PLATILLO p inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA=c.CODIGO_CATEGORIA
 	where p.CODIGO_PLATILLO = @id
 end
@@ -410,7 +419,8 @@ declare @max int
 begin
 
 	select @max = ISNULL(max(CODIGO_PEDIDO)+1,1) from TB_PEDIDO 
-	insert into TB_PEDIDO(CODIGO_PEDIDO,CODIGO_USUARIO,FECHA_PEDIDO,ESTADO_PEDIDO,TOTAL_PEDIDO) values (@max,@usuario,GETDATE(),DEFAULT,@total)
+	insert into TB_PEDIDO(CODIGO_PEDIDO,CODIGO_USUARIO,FECHA_PEDIDO,
+	ESTADO_PEDIDO,TOTAL_PEDIDO) values (@max,@usuario,GETDATE(),DEFAULT,@total)
 	select @max as CODIGO_PEDIDO
 end
 go
@@ -419,11 +429,9 @@ create proc sp_AgregarDetallePedido(@pedido int,@platillo int,@precio decimal(10
 as
 begin
 	
-	insert into TB_DETALLEPEDIDO(CODIGO_PEDIDO,CODIGO_PLATILLO,PRECIO,CANTIDAD) values (@pedido,@platillo,@precio,@cantidad)
+	insert into TB_DETALLEPEDIDO(CODIGO_PEDIDO,CODIGO_PLATILLO,PRECIO,CANTIDAD) 
+	values (@pedido,@platillo,@precio,@cantidad)
 end
-go
-
-exec sp_AgregarPedido 1,5000
 go
 
 
@@ -431,7 +439,8 @@ go
 create proc sp_ListarPedidosXEstado(@estado int)
 as
 begin
-	select CODIGO_PEDIDO,u.CODIGO_USUARIO as CODIGO_USUARIO,u.NOMBRE_USUARIO as NOMBRE_USUARIO,ESTADO_PEDIDO,FECHA_PEDIDO,TOTAL_PEDIDO
+	select CODIGO_PEDIDO,u.CODIGO_USUARIO as CODIGO_USUARIO,u.NOMBRE_USUARIO as NOMBRE_USUARIO,
+	ESTADO_PEDIDO,FECHA_PEDIDO,TOTAL_PEDIDO
 	from TB_PEDIDO p inner join TB_USUARIO u on p.CODIGO_USUARIO = u.CODIGO_USUARIO
 	where ESTADO_PEDIDO = @estado
 end
@@ -443,7 +452,9 @@ GO
 create proc sp_ListarDetallePedido(@pedido int)
 as
 begin
-	select CODIGO_PEDIDO,p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,p.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,PRECIO,CANTIDAD
+	select CODIGO_PEDIDO,p.CODIGO_PLATILLO as CODIGO_PLATILLO,p.NOMBRE_PLATILLO as NOMBRE_PLATILLO,
+	p.CODIGO_CATEGORIA as CODIGO_CATEGORIA,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA,PRECIO,
+	CANTIDAD
 	from TB_DETALLEPEDIDO dp inner join TB_PLATILLO p on dp.CODIGO_PLATILLO = p.CODIGO_PLATILLO
 	inner join TB_CATEGORIA c on p.CODIGO_CATEGORIA = c.CODIGO_CATEGORIA
 	where  CODIGO_PEDIDO = @pedido
@@ -457,7 +468,9 @@ create proc sp_ListarPlatillosXFechas(@fecha1 date,@fecha2 date)
 as
 begin
 
-	select top 6 pl.CODIGO_PLATILLO as CODIGO_PLATILLO,pl.NOMBRE_PLATILLO as NOMBRE_PLATILLO,pl.PRECIO_PLATILLO as PRECIO_PLATILLO,sum(CANTIDAD) as CANTIDAD,c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA
+	select top 10 pl.CODIGO_PLATILLO as CODIGO_PLATILLO,pl.NOMBRE_PLATILLO as NOMBRE_PLATILLO,
+	pl.PRECIO_PLATILLO as PRECIO_PLATILLO,sum(CANTIDAD) as CANTIDAD,
+	c.DESCRIPCION_CATEGORIA as DESCRIPCION_CATEGORIA
 	from TB_PEDIDO p inner join TB_DETALLEPEDIDO dp 
 	on p.CODIGO_PEDIDO = dp.CODIGO_PEDIDO
 	inner join TB_PLATILLO pl 
@@ -517,7 +530,8 @@ create proc sp_GetTarjetaByInfo(@idTipoTarjeta int,@numeroTarjeta varchar(16),
 @mesExpiracionTarjeta char(2),@añoExpiracionTarjeta char(4))
 as
 begin
-	select tar.NUMERO_TARJETA as NUMERO_TARJETA,tar.NOMBRE_TARJETA as NOMBRE_TARJETA,tar.TARJETA_HABILITADA as TARJETA_HABILITADA,tar.CREDITO_DISPONIBLE as CREDITO_DISPONIBLE
+	select tar.NUMERO_TARJETA as NUMERO_TARJETA,tar.NOMBRE_TARJETA as NOMBRE_TARJETA,
+	tar.TARJETA_HABILITADA as TARJETA_HABILITADA,tar.CREDITO_DISPONIBLE as CREDITO_DISPONIBLE
 	from TB_TARJETA tar where tar.ID_TIPO_TARJETA = @idTipoTarjeta
 	and tar.NUMERO_TARJETA = @numeroTarjeta
 	and tar.NOMBRE_TARJETA = @nombreTarjeta
@@ -615,8 +629,8 @@ INSERT INTO TB_PLATILLO VALUES('Arroz Zambito','El arroz zambito es un postre pe
 INSERT INTO TB_PLATILLO VALUES('Bizcocho de Limón','Este postre es muy típico, sobre todo en Francia, y se ha hecho por abuelas durante generaciones. La parte de la historia que me gusta es que estas abuelas francesas miden los ingredientes del bizcocho con los tarros de yogur.',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Bizcochos','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Bocadillo de Dama','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Borrachitos','Sabe muy bien elíjalo para su deguste',3,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-INSERT INTO TB_PLATILLO VALUES('Bombas de Sémola','Sabe muy bien elíjalo para su deguste',5,1,4,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Borrachitos','Sabe muy bien elíjalo para su deguste',3,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
+INSERT INTO TB_PLATILLO VALUES('Bombas de Sémola','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Borrachitos de Chocolate','Sabe muy bien elíjalo para su deguste',3,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Budín de Chancay','Sabe muy bien elíjalo para su deguste',5,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Brownies','Sabe muy bien elíjalo para su deguste',4,1,2,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
@@ -651,5 +665,3 @@ INSERT INTO TB_PLATILLO VALUES('Zombie','Sus primeros pasos se dan en la década
 INSERT INTO TB_PLATILLO VALUES('Tom Collins','El Tom Collins aparecía en 1876 en la The Bartenders Guide de Thomas, y poco después ya era un cocktail popular en los USA. Su receta se ha ido modificando un poco con el paso de los años, hasta quedar más o menos establecida así: Ingredientes 4.5 cl de ginebra 3 cl. de zumo de limón 1... ',14,1,3,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Negroni','Cuando llega la Navidad, los más pequeños de la casa piensan en los regalos y los más mayores en la comida que deben preparar para sus invitados. Una forma original y sencilla de empezar esas veladas es con un cocktail de aperitivo. Como el Negroni. El Negroni es ideal para estas fechas... ',11,1,3,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
 INSERT INTO TB_PLATILLO VALUES('Hurricane','El origen de esta bebida se atribuye al señor Pat OBrien, propietario de un bar a su nombre en la ciudad más grande del estado de Louisiana. Al parecer, OBrien acababa de abrir el bar y sólo tenía acceso a determinados licores, entre ellos el ron, que estableció como base para crear una bebida...',13,1,3,'https://api.norecipes.com/wp-content/uploads/2017/12/chicken-adobo_008.jpg')
-
-select * from TB_TIPO
